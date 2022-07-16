@@ -10,7 +10,6 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class ImageSearchAppState extends State<ImageSearchApp> {
-  Map<String, dynamic> person = {};
   List<Map<String, dynamic>> images = [];
 
   @override
@@ -20,8 +19,7 @@ class ImageSearchAppState extends State<ImageSearchApp> {
   }
 
   Future initData() async {
-    person = await getData();
-    images = await getImages();
+    getImages();
     setState(() {});
   }
 
@@ -37,40 +35,37 @@ class ImageSearchAppState extends State<ImageSearchApp> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        height: 56,
-        child: const Padding(
-          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-          child: TextField(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: Colors.blue, width: 2),
+      body: Column(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            height: 56,
+            child: const Padding(
+              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+              child: TextField(
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(color: Colors.blue, width: 2),
+                  ),
+                  suffixIcon: Icon(Icons.search),
+                  hintText: 'apple?',
+                ),
               ),
-              suffixIcon: Icon(Icons.search),
-              hintText: 'apple?',
             ),
           ),
-        ),
+          GridView.builder(
+              itemCount: 20,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, childAspectRatio: 1),
+              itemBuilder: (context, int index) {
+                Map<String, dynamic> image = images[index];
+                return Image.network(image['previewURL']);
+              }),
+        ],
       ),
-      child: person == null
-          ? const CircularProgressIndicator()
-          : Column(
-              children: [
-                Text('ggg'),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, int index) {
-                      Map<String, dynamic> image = images[index];
-                      return Image.network(image['previewURL']);
-                    },
-                  ),
-                ),
-              ],
-            ),
     );
   }
 }
