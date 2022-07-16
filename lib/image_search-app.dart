@@ -10,6 +10,7 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class ImageSearchAppState extends State<ImageSearchApp> {
+  Map<String, dynamic>? person;
   List<Map<String, dynamic>> images = [];
 
   @override
@@ -19,7 +20,8 @@ class ImageSearchAppState extends State<ImageSearchApp> {
   }
 
   Future initData() async {
-    getImages();
+    person = await getData();
+    images = await getImages();
     setState(() {});
   }
 
@@ -56,14 +58,23 @@ class ImageSearchAppState extends State<ImageSearchApp> {
               ),
             ),
           ),
-          GridView.builder(
-              itemCount: 20,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, childAspectRatio: 1),
-              itemBuilder: (context, int index) {
-                Map<String, dynamic> image = images[index];
-                return Image.network(image['previewURL']);
-              }),
+          Center(
+            child: person == null
+                ? const CircularProgressIndicator()
+                : Expanded(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      itemCount: 20,
+                      itemBuilder: (BuildContext context, int index) {
+                        Map<String, dynamic> image = images[index];
+                        return Image.network(image['previewURL']);
+                      },
+                    ),
+                  ),
+          ),
         ],
       ),
     );
