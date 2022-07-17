@@ -61,18 +61,27 @@ class ImageSearchAppState extends State<ImageSearchApp> {
           Center(
             child: person == null
                 ? const CircularProgressIndicator()
-                : Expanded(
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                      ),
-                      itemCount: 20,
-                      itemBuilder: (BuildContext context, int index) {
-                        Map<String, dynamic> image = images[index];
-                        return Image.network(image['previewURL']);
-                      },
+                : GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
                     ),
+                    itemCount: images.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Map<String, dynamic> image = images[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1.0),
+                          ),
+                          child: Image.network(
+                            image['previewURL'],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
                   ),
           ),
         ],
