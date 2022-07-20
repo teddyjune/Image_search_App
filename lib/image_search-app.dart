@@ -89,14 +89,9 @@ class _ShowGridviewState extends State<ShowGridview> {
           Map<String, dynamic> image = widget.images[index];
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(width: 1.0),
-              ),
-              child: Image.network(
-                image['previewURL'],
-                fit: BoxFit.cover,
-              ),
+            child: Image.network(
+              image['previewURL'],
+              fit: BoxFit.cover,
             ),
           );
         },
