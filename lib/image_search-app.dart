@@ -5,26 +5,8 @@ import 'package:flutter/material.dart';
 import 'mock_data/images.dart';
 import 'picture.dart';
 
-class ImageSearchApp extends StatefulWidget {
+class ImageSearchApp extends StatelessWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
-
-  @override
-  State<ImageSearchApp> createState() => ImageSearchAppState();
-}
-
-class ImageSearchAppState extends State<ImageSearchApp> {
-  List<Picture> _images = [];
-
-  @override
-  void initState() {
-    super.initState();
-    initData();
-  }
-
-  Future initData() async {
-    _images = await getImages();
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +42,35 @@ class ImageSearchAppState extends State<ImageSearchApp> {
             ),
           ),
           Expanded(
-            child: images.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : GridView.builder(
+            child: FutureBuilder<List<Picture>>(
+                future: getImages(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text('에러가 발생했습니다'),
+                    );
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: Text('데이터가 없습니다'),
+                    );
+                  }
+
+                  final images = snapshot.data!;
+
+                  return GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemCount: _images.length,
+                    itemCount: images.length,
                     itemBuilder: (BuildContext context, int index) {
-                      Picture image = _images[index];
+                      Picture image = images[index];
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
@@ -81,20 +82,21 @@ class ImageSearchAppState extends State<ImageSearchApp> {
                         ),
                       );
                     },
-                  ),
+                  );
+                }),
           ),
         ],
       ),
     );
   }
+}
 
-  Future<List<Picture>> getImages() async {
-    await Future.delayed(const Duration(seconds: 2));
+Future<List<Picture>> getImages() async {
+  await Future.delayed(const Duration(seconds: 2));
 
-    String jsonString = images;
+  String jsonString = images;
 
-    Map<String, dynamic> json = jsonDecode(jsonString);
-    Iterable hits = json['hits'];
-    return hits.map((e) => Picture.fromJson(e)).toList();
-  }
+  Map<String, dynamic> json = jsonDecode(jsonString);
+  Iterable hits = json['hits'];
+  return hits.map((e) => Picture.fromJson(e)).toList();
 }
