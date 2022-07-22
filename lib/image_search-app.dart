@@ -5,8 +5,23 @@ import 'package:flutter/material.dart';
 import 'mock_data/images.dart';
 import 'picture.dart';
 
-class ImageSearchApp extends StatelessWidget {
+class ImageSearchApp extends StatefulWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
+
+  @override
+  State<ImageSearchApp> createState() => _ImageSearchAppState();
+}
+
+class _ImageSearchAppState extends State<ImageSearchApp> {
+  final _controller = TextEditingController();
+  //textfield에 치는 글자를 저장
+  String _query = '';
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +42,23 @@ class ImageSearchApp extends StatelessWidget {
               color: Colors.white,
             ),
             height: 56,
-            child: const Padding(
-              padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: TextField(
+                controller: _controller,
                 decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(color: Colors.blue, width: 2),
                   ),
-                  suffixIcon: Icon(Icons.search),
+                  suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _query = _controller.text;
+                          //textfield에 친 글자를 query변수에 넘겨주고 그걸 필터링해서 setState로 그려줌.
+                        });
+                      },
+                      child: const Icon(Icons.search)),
                   hintText: '검색어를 입력하세요',
                 ),
               ),
@@ -67,12 +90,18 @@ class ImageSearchApp extends StatelessWidget {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: images.map((Picture image) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          image.previewURL,
-                          fit: BoxFit.cover,
+                    children: images
+                        .where((e) => e.tags.contains(_query))
+                    //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
+                        .map((Picture image) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            image.previewURL,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       );
                     }).toList(),
