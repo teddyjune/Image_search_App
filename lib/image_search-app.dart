@@ -54,6 +54,7 @@ class ImageSearchApp extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  final images = snapshot.data!;
 
                   if (!snapshot.hasData) {
                     return const Center(
@@ -61,27 +62,20 @@ class ImageSearchApp extends StatelessWidget {
                     );
                   }
 
-                  final images = snapshot.data!;
-
-                  return GridView.builder(
+                  return GridView(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemCount: images.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Picture image = images[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            image.previewURL,
-                            fit: BoxFit.cover,
-                          ),
+                    children: images.map((Picture image) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          image.previewURL,
+                          fit: BoxFit.cover,
                         ),
                       );
-                    },
+                    }).toList(),
                   );
                 }),
           ),
