@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-import 'mock_data/images.dart';
 import 'picture.dart';
 
 class ImageSearchApp extends StatefulWidget {
@@ -13,8 +13,8 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class _ImageSearchAppState extends State<ImageSearchApp> {
-  final _controller = TextEditingController();
   //textfield에 치는 글자를 저장
+  final _controller = TextEditingController();
   String _query = '';
 
   @override
@@ -66,7 +66,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
           Expanded(
             child: FutureBuilder<List<Picture>>(
-                future: getImages(),
+                future: getImages(_query),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(
@@ -90,9 +90,8 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: images
-                        .where((e) => e.tags.contains(_query))
-                    //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
+                    children: images.where((e) => e.tags.contains(_query))
+                        //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
                         .map((Picture image) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -114,10 +113,12 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
   }
 }
 
-Future<List<Picture>> getImages() async {
-  await Future.delayed(const Duration(seconds: 2));
+Future<List<Picture>> getImages(String query) async {
+  Uri url = Uri.parse(
+      'https://pixabay.com/api/?key=10711147-dc41758b93b263957026bdadb&q=$query&image_type=photo');
+  http.Response response = await http.get(url);
 
-  String jsonString = images;
+  String jsonString = response.body;
 
   Map<String, dynamic> json = jsonDecode(jsonString);
   Iterable hits = json['hits'];
