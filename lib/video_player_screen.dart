@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  VideoPlayerScreen({Key? key}) : super(key: key);
+  final String url;
+
+  const VideoPlayerScreen(this.url, {Key? key}) : super(key: key);
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
@@ -16,10 +18,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     // VideoPlayerController를 저장하기 위한 변수를 만듭니다. VideoPlayerController는
     // asset, 파일, 인터넷 등의 영상들을 제어하기 위해 다양한 생성자를 제공합니다.
-    _controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
-
+    _controller = VideoPlayerController.network(widget.url);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     super.initState();
@@ -49,7 +48,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             } else {
               // 만약 VideoPlayerController가 여전히 초기화 중이라면,
               // 로딩 스피너를 보여줍니다.
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
         ),
