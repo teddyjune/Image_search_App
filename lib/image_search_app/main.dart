@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/image_search_app/image_search-app.dart';
+import 'package:image_search_app/image_search_app/page_state.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ImageSearchApp(),
+      home: PageState(),
     );
   }
 }

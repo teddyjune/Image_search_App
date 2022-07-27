@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_search_app/image_search_app/picture_api.dart';
+import 'package:image_search_app/image_search_app/video_api.dart';
 
 import 'picture.dart';
 
@@ -11,8 +12,9 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class _ImageSearchAppState extends State<ImageSearchApp> {
-  int _selectedIndex = 0;
+
   final _pictureApi = PictureApi();
+  final _videoApi = VideoApi();
   final _controller = TextEditingController();
   String _query = '';
 
@@ -22,11 +24,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
     super.dispose();
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -114,21 +112,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.image_outlined),
-            label: '이미지 검색',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.video_collection_outlined),
-            label: '비디오 검색',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+
     );
   }
 }
