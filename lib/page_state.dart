@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/image_search_app/image_search-page.dart';
-import 'package:image_search_app/image_search_app/video_search_page.dart';
+import 'package:image_search_app/image_search-page.dart';
+import 'package:image_search_app/video_search_page.dart';
 
 class PageState extends StatefulWidget {
   @override
@@ -10,8 +10,8 @@ class PageState extends StatefulWidget {
 class _PageStateState extends State<PageState> {
   int _selectedIndex = 0;
   final _pages = [
-    ImageSearchApp(),
-    VideoSearchPage(),
+    const ImageSearchApp(),
+    const VideoSearchPage(),
   ];
 
   void _onItemTapped(int index) {

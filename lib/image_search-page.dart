@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/image_search_app/picture_api.dart';
-import 'package:image_search_app/image_search_app/video_api.dart';
 
 import 'picture.dart';
+import 'picture_api.dart';
 
 class ImageSearchApp extends StatefulWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
@@ -12,7 +11,6 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class _ImageSearchAppState extends State<ImageSearchApp> {
-
   final _pictureApi = PictureApi();
   final _controller = TextEditingController();
   String _query = '';
@@ -109,7 +107,6 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
         ],
       ),
-
     );
   }
 }

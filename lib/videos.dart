@@ -1,8 +1,8 @@
 class Videos {
+  final Map<String, dynamic> videos;
   final String tags;
   final String pictureId;
-  final String thumbnailSize = '200x150';
-  Map<String, dynamic> videos;
+  final String thumbnailSize = '256x166';
 
   Videos({
     required this.videos,

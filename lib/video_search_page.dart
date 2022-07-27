@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/image_search_app/video_api.dart';
-import 'package:image_search_app/image_search_app/videos.dart';
+
+import 'video_api.dart';
+import 'video_player_screen.dart';
+import 'videos.dart';
 
 class VideoSearchPage extends StatefulWidget {
   const VideoSearchPage({Key? key}) : super(key: key);
@@ -11,25 +13,12 @@ class VideoSearchPage extends StatefulWidget {
 
 class _VideoSearchPageState extends State<VideoSearchPage> {
   final _videoApi = VideoApi();
-  final _controller = TextEditingController();
+  final _textController = TextEditingController();
   String _query = '';
-
-  // VideoPlayerController _controller;
-  // Future<void> _initializeVideoPlayerFuture;
-
-  // @override
-  // void initState() {
-  //   _controller = VideoPlayerController.network(
-  //     'https://pixabay.com/api/videos/',
-  //   );
-  //   _initializeVideoPlayerFuture = _controller.initialize();
-  //   _controller.setLooping(true);
-  //   super.initState();
-  // }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -55,7 +44,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: TextField(
-                controller: _controller,
+                controller: _textController,
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -64,7 +53,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _query = _controller.text;
+                          _query = _textController.text;
                         });
                       },
                       child: const Icon(Icons.search)),
@@ -86,13 +75,13 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  final videos = snapshot.data!;
 
                   if (!snapshot.hasData) {
                     return const Center(
                       child: Text('데이터가 없습니다'),
                     );
                   }
+                  final videos = snapshot.data!;
 
                   return GridView(
                     gridDelegate:
@@ -102,8 +91,14 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                     children: videos.where((e) => e.tags.contains(_query))
                         //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
                         .map((Videos video) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VideoPlayerScreen()),
+                          );
+                        },
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Image.network(
