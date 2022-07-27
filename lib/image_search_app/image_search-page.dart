@@ -14,7 +14,6 @@ class ImageSearchApp extends StatefulWidget {
 class _ImageSearchAppState extends State<ImageSearchApp> {
 
   final _pictureApi = PictureApi();
-  final _videoApi = VideoApi();
   final _controller = TextEditingController();
   String _query = '';
 
@@ -24,8 +23,6 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +31,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: const Text(
-          '이미지 검색 앱',
+          '이미지 검색',
           style: TextStyle(color: Colors.black),
         ),
       ),
