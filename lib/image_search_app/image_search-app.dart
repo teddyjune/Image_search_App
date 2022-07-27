@@ -1,7 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:image_search_app/image_search_app/picture_api.dart';
 
 import 'picture.dart';
 
@@ -13,7 +11,8 @@ class ImageSearchApp extends StatefulWidget {
 }
 
 class _ImageSearchAppState extends State<ImageSearchApp> {
-  //textfield에 치는 글자를 저장
+  int _selectedIndex = 0;
+  final _pictureApi = PictureApi();
   final _controller = TextEditingController();
   String _query = '';
 
@@ -21,6 +20,12 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -66,7 +71,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
           Expanded(
             child: FutureBuilder<List<Picture>>(
-                future: getImages(_query),
+                future: _pictureApi.getImages(_query),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(
@@ -109,18 +114,21 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.image_outlined),
+            label: '이미지 검색',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.video_collection_outlined),
+            label: '비디오 검색',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
     );
   }
-}
-
-Future<List<Picture>> getImages(String query) async {
-  Uri url = Uri.parse(
-      'https://pixabay.com/api/?key=10711147-dc41758b93b263957026bdadb&q=$query&image_type=photo');
-  http.Response response = await http.get(url);
-
-  String jsonString = response.body;
-
-  Map<String, dynamic> json = jsonDecode(jsonString);
-  Iterable hits = json['hits'];
-  return hits.map((e) => Picture.fromJson(e)).toList();
 }
