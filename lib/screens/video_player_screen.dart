@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:image_search_app/model/videos.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {
-  final String url;
+  final Videos video;
 
-  const VideoPlayerScreen(this.url, {Key? key}) : super(key: key);
+  const VideoPlayerScreen({required this.video, Key? key}) : super(key: key);
 
   @override
   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
@@ -18,7 +19,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     // VideoPlayerController를 저장하기 위한 변수를 만듭니다. VideoPlayerController는
     // asset, 파일, 인터넷 등의 영상들을 제어하기 위해 다양한 생성자를 제공합니다.
-    _controller = VideoPlayerController.network(widget.url);
+    _controller = VideoPlayerController.network(widget.video.videoUrl);
     _initializeVideoPlayerFuture = _controller.initialize();
     _controller.setLooping(true);
     super.initState();

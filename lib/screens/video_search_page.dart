@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../api/video_api.dart';
 import '../model/videos.dart';
 import 'video_player_screen.dart';
+import 'video_search/components/video_thumbnail.dart';
 
 class VideoSearchPage extends StatefulWidget {
   const VideoSearchPage({Key? key}) : super(key: key);
@@ -66,19 +67,15 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             child: FutureBuilder<List<Videos>>(
                 future: _videoApi.getVideos(_query),
                 builder: (context, snapshot) {
-                  if (snapshot.hasError) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
                     return const Center(
                       child: Text('에러가 발생했습니다'),
                     );
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (!snapshot.hasData) {
+                  } else if (!snapshot.hasData) {
                     return const Center(
-                      child: Text('데이터가 없습니다'),
+                      child: Text('검색결과 : 0'),
                     );
                   }
                   final videos = snapshot.data!;
@@ -97,19 +94,10 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    VideoPlayerScreen(video.videoUrl)),
+                                    VideoPlayerScreen(video: video)),
                           );
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              video.thumbnail,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        child: VideoThumbnail(video),
                       );
                     }).toList(),
                   );
