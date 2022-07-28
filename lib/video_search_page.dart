@@ -63,7 +63,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Videos>>(
+            child: FutureBuilder <List<Videos>>(
                 future: _videoApi.getVideos(_query),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -96,14 +96,17 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen()),
+                                builder: (context) => VideoPlayerScreen(video.videos['large']['url'])),
                           );
                         },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            'https://i.vimeocdn.com/video/${video.pictureId}_${video.thumbnailSize}.jpg',
-                            fit: BoxFit.cover,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              'https://i.vimeocdn.com/video/${video.pictureId}_${video.thumbnailSize}.jpg',
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       );
