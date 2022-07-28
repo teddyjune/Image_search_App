@@ -47,9 +47,10 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
               child: TextField(
                 controller: _textController,
                 decoration: InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.blue, width: 2),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary, width: 2),
                   ),
                   suffixIcon: GestureDetector(
                       onTap: () {

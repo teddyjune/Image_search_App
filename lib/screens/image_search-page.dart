@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../model/picture.dart';
 import '../api/picture_api.dart';
+import '../model/picture.dart';
 
 class ImageSearchApp extends StatefulWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
@@ -27,10 +27,8 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
         title: const Text(
           '이미지 검색',
-          style: TextStyle(color: Colors.black),
         ),
       ),
       body: Column(
@@ -45,9 +43,10 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
               child: TextField(
                 controller: _controller,
                 decoration: InputDecoration(
-                  enabledBorder: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    borderSide: BorderSide(color: Colors.blue, width: 2),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.primary, width: 2),
                   ),
                   suffixIcon: GestureDetector(
                       onTap: () {
