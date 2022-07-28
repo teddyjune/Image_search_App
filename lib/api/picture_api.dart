@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:image_search_app/picture.dart';
+import 'package:image_search_app/model/picture.dart';
 
 class PictureApi {
   Future<List<Picture>> getImages(String query) async {

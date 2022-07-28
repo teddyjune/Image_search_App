@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
-import 'picture.dart';
-import 'picture_api.dart';
+import '../api/video_api.dart';
+import '../model/videos.dart';
+import 'video_player_screen.dart';
 
-class ImageSearchApp extends StatefulWidget {
-  const ImageSearchApp({Key? key}) : super(key: key);
+class VideoSearchPage extends StatefulWidget {
+  const VideoSearchPage({Key? key}) : super(key: key);
 
   @override
-  State<ImageSearchApp> createState() => _ImageSearchAppState();
+  State<VideoSearchPage> createState() => _VideoSearchPageState();
 }
 
-class _ImageSearchAppState extends State<ImageSearchApp> {
-  final _pictureApi = PictureApi();
-  final _controller = TextEditingController();
+class _VideoSearchPageState extends State<VideoSearchPage> {
+  final _videoApi = VideoApi();
+  final _textController = TextEditingController();
   String _query = '';
 
   @override
   void dispose() {
-    _controller.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -29,7 +30,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: const Text(
-          '이미지 검색',
+          '비디오 검색',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -43,7 +44,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: TextField(
-                controller: _controller,
+                controller: _textController,
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -52,8 +53,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _query = _controller.text;
-                          //textfield에 친 글자를 query변수에 넘겨주고 그걸 필터링해서 setState로 그려줌.
+                          _query = _textController.text;
                         });
                       },
                       child: const Icon(Icons.search)),
@@ -63,8 +63,8 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Picture>>(
-                future: _pictureApi.getImages(_query),
+            child: FutureBuilder<List<Videos>>(
+                future: _videoApi.getVideos(_query),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(
@@ -75,29 +75,39 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  final images = snapshot.data!;
 
                   if (!snapshot.hasData) {
                     return const Center(
                       child: Text('데이터가 없습니다'),
                     );
                   }
+                  final videos = snapshot.data!;
 
                   return GridView(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: images.where((e) => e.tags.contains(_query))
+                    children: videos.where((e) => e.tags.contains(_query))
                         //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
-                        .map((Picture image) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
-                            image.previewURL,
-                            fit: BoxFit.cover,
+                        .map((Videos video) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VideoPlayerScreen(video.videoUrl)),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              video.thumbnail,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       );

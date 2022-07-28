@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/image_search-page.dart';
-import 'package:image_search_app/video_search_page.dart';
+import 'package:image_search_app/screens/image_search-page.dart';
+import 'package:image_search_app/screens/video_search_page.dart';
 
-class PageState extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  State<PageState> createState() => _PageStateState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _PageStateState extends State<PageState> {
+class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final _pages = [
     const ImageSearchApp(),

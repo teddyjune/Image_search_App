@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 
-import 'video_api.dart';
-import 'video_player_screen.dart';
-import 'videos.dart';
+import '../model/picture.dart';
+import '../api/picture_api.dart';
 
-class VideoSearchPage extends StatefulWidget {
-  const VideoSearchPage({Key? key}) : super(key: key);
+class ImageSearchApp extends StatefulWidget {
+  const ImageSearchApp({Key? key}) : super(key: key);
 
   @override
-  State<VideoSearchPage> createState() => _VideoSearchPageState();
+  State<ImageSearchApp> createState() => _ImageSearchAppState();
 }
 
-class _VideoSearchPageState extends State<VideoSearchPage> {
-  final _videoApi = VideoApi();
-  final _textController = TextEditingController();
+class _ImageSearchAppState extends State<ImageSearchApp> {
+  final _pictureApi = PictureApi();
+  final _controller = TextEditingController();
   String _query = '';
 
   @override
   void dispose() {
-    _textController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -30,7 +29,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         title: const Text(
-          '비디오 검색',
+          '이미지 검색',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -44,7 +43,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               child: TextField(
-                controller: _textController,
+                controller: _controller,
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -53,7 +52,8 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
-                          _query = _textController.text;
+                          _query = _controller.text;
+                          //textfield에 친 글자를 query변수에 넘겨주고 그걸 필터링해서 setState로 그려줌.
                         });
                       },
                       child: const Icon(Icons.search)),
@@ -63,8 +63,8 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
             ),
           ),
           Expanded(
-            child: FutureBuilder <List<Videos>>(
-                future: _videoApi.getVideos(_query),
+            child: FutureBuilder<List<Picture>>(
+                future: _pictureApi.getImages(_query),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(
@@ -75,38 +75,29 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  final images = snapshot.data!;
 
                   if (!snapshot.hasData) {
                     return const Center(
                       child: Text('데이터가 없습니다'),
                     );
                   }
-                  final videos = snapshot.data!;
 
                   return GridView(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: videos.where((e) => e.tags.contains(_query))
+                    children: images.where((e) => e.tags.contains(_query))
                         //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
-                        .map((Videos video) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VideoPlayerScreen(video.videos['large']['url'])),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              'https://i.vimeocdn.com/video/${video.pictureId}_${video.thumbnailSize}.jpg',
-                              fit: BoxFit.cover,
-                            ),
+                        .map((Picture image) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            image.previewURL,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       );
