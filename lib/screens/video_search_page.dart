@@ -29,18 +29,13 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
         title: const Text(
           '비디오 검색',
-          style: TextStyle(color: Colors.black),
         ),
       ),
       body: Column(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+          SizedBox(
             height: 56,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),

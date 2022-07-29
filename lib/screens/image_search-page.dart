@@ -33,10 +33,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
       ),
       body: Column(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
+          SizedBox(
             height: 56,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
