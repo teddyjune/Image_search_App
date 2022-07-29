@@ -25,6 +25,7 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final orientation = MediaQuery.of(context).orientation;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -76,29 +77,27 @@ class _VideoSearchPageState extends State<VideoSearchPage> {
                   }
                   final videos = snapshot.data!;
 
-                  return OrientationBuilder(builder: (context, orientation) {
-                    return GridView(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount:
-                            orientation == Orientation.portrait ? 2 : 4,
-                      ),
-                      children: videos.where((e) => e.tags.contains(_query))
-                          //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
-                          .map((Videos video) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      VideoPlayerScreen(video: video)),
-                            );
-                          },
-                          child: VideoThumbnail(video),
-                        );
-                      }).toList(),
-                    );
-                  });
+                  return GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          orientation == Orientation.portrait ? 2 : 4,
+                    ),
+                    children: videos.where((e) => e.tags.contains(_query))
+                        //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
+                        .map((Videos video) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VideoPlayerScreen(video: video)),
+                          );
+                        },
+                        child: VideoThumbnail(video),
+                      );
+                    }).toList(),
+                  );
                 }),
           ),
         ],
