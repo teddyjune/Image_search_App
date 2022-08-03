@@ -47,10 +47,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                   ),
                   suffixIcon: GestureDetector(
                       onTap: () {
-                        setState(() {
-                          _query = _controller.text;
-                          //textfield에 친 글자를 query변수에 넘겨주고 그걸 필터링해서 setState로 그려줌.
-                        });
+                        _pictureApi.fetchImages(_controller.text);
                       },
                       child: const Icon(Icons.search)),
                   hintText: '검색어를 입력하세요',
@@ -60,7 +57,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
           ),
           Expanded(
             child: StreamBuilder<List<Picture>>(
-                future: _pictureApi.imageStream,
+                stream: _pictureApi.imageStream,
                 initialData: const [],
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -85,9 +82,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: images.where((e) => e.tags.contains(_query))
-                        //검색창에 친 글자를 데이터의 tags에서 찾아주는 기능
-                        .map((Picture image) {
+                    children: images.map((Picture image) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
