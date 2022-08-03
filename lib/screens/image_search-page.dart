@@ -59,8 +59,9 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Picture>>(
-                future: _pictureApi.getImages(_query),
+            child: StreamBuilder<List<Picture>>(
+                future: _pictureApi.imageStream,
+                initialData: const [],
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return const Center(
