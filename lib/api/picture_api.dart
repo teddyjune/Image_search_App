@@ -14,7 +14,7 @@ final _imagesStreamController = StreamController<List<Picture>>();
 Stream<List<Picture>> get imageStream => _imagesStreamController.stream;
 
 Future fetchImages(String query) async {
-  <List<Picture>> images = await getImages(query);
+  List<Picture> images = await getImages(query);
   _imagesStreamController.add(images);
 }
   Future<List<Picture>> getImages(String query) async {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/screens/image_search-page.dart';
+import 'package:image_search_app/screens/image_search/image_search-page.dart';
 import 'package:image_search_app/screens/video_search_page.dart';
 
 class HomeScreen extends StatefulWidget {
