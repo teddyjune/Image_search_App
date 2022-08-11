@@ -7,7 +7,7 @@ class ImageSearchViewModel extends ChangeNotifier {
   List<Picture> images = [];
 
   void fetchImages(String query) async {
-    images = await _pictureApi.fetchImages(query);
+    images = await _pictureApi.getImages(query);
     notifyListeners();
   }
 }

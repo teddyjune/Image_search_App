@@ -13,7 +13,6 @@ class ImageSearchApp extends StatefulWidget {
 
 class _ImageSearchAppState extends State<ImageSearchApp> {
   final _controller = TextEditingController();
-  String _query = '';
 
   @override
   void dispose() {
@@ -24,7 +23,6 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ImageSearchViewModel>();
-    List<Picture> images = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -85,7 +83,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
-              children: images.map((Picture image) {
+              children: viewModel.images.map((Picture image) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
