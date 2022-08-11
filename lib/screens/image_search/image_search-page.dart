@@ -56,46 +56,27 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
               ),
             ),
           ),
-          // Expanded(
-          //   child: StreamBuilder<List<Picture>>(
-          //       stream: _pictureApi.imageStream,
-          //       initialData: const [],
-          //       builder: (context, snapshot) {
-          //         if (snapshot.hasError) {
-          //           return const Center(
-          //             child: Text('에러가 발생했습니다'),
-          //           );
-          //         }
-          //
-          //         if (snapshot.connectionState == ConnectionState.waiting) {
-          //           return const Center(child: CircularProgressIndicator());
-          //         }
-          //         final images = snapshot.data!;
-          //
-          //         if (!snapshot.hasData) {
-          //           return const Center(
-          //             child: Text('데이터가 없습니다'),
-          //           );
-          //         }
-
           Expanded(
-            child: GridView(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              children: viewModel.images.map((Picture image) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      image.previewURL,
-                      fit: BoxFit.cover,
+            child: viewModel.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : GridView(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
                     ),
+                    children: viewModel.images.map((Picture image) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            image.previewURL,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
-                );
-              }).toList(),
-            ),
           ),
         ],
       ),
