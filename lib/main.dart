@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/screens/home_screen.dart';
-import 'package:image_search_app/screens/image_search/image_search_view_model.dart';
-
+import 'package:image_search_app/ui/home_screen.dart';
+import 'package:image_search_app/ui/image_search/image_search_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'color_schemes.g.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => ImageSearchViewModel(), child: const MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => ImageSearchViewModel()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

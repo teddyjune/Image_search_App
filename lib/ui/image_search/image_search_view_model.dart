@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/api/picture_api.dart';
-import 'package:image_search_app/model/picture.dart';
+import 'package:image_search_app/data/model/photo.dart';
+import 'package:image_search_app/data/repository/photo_repository.dart';
 
 class ImageSearchViewModel extends ChangeNotifier {
   //데이터 저장소
-  final _pictureApi = PictureApi();
+  final _photoRepository = PhotoRepository();
 
   //데이터
-  List<Picture> images = [];
+  List<Photo> photos = [];
 
   //로딩
   bool isLoading = false;
@@ -16,7 +16,7 @@ class ImageSearchViewModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    images = await _pictureApi.getImages(query);
+    photos = await _photoRepository.getImages(query);
     isLoading = false;
     notifyListeners();
   }

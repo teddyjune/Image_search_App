@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/model/videos.dart';
+import 'package:image_search_app/data/model/videos.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreen extends StatefulWidget {

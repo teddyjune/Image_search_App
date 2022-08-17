@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/screens/image_search/image_search_view_model.dart';
+import 'package:image_search_app/data/model/photo.dart';
+import 'package:image_search_app/ui/image_search/image_search_view_model.dart';
 import 'package:provider/provider.dart';
-
-import '../../../model/picture.dart';
 
 class ImageSearchApp extends StatefulWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
@@ -64,7 +63,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: viewModel.images.map((Picture image) {
+                    children: viewModel.photos.map((Photo image) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(

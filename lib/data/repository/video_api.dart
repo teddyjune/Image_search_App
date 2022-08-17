@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:image_search_app/model/videos.dart';
+import 'package:image_search_app/data/model/videos.dart';
 
 class VideoApi {
   Future<List<Videos>> getVideos(String query) async {

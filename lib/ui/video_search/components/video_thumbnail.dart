@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_search_app/model/videos.dart';
+
+import '../../../data/model/videos.dart';
 
 class VideoThumbnail extends StatelessWidget {
   final Videos video;

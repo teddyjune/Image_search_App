@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../api/video_api.dart';
-import '../model/videos.dart';
-import 'video_player_screen.dart';
-import 'video_search/components/video_thumbnail.dart';
+import '../../data/model/videos.dart';
+import '../../data/repository/video_api.dart';
+import '../video_player_screen.dart';
+import 'components/video_thumbnail.dart';
 
 class VideoSearchPage extends StatefulWidget {
   const VideoSearchPage({Key? key}) : super(key: key);
