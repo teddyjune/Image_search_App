@@ -13,6 +13,7 @@ class ImageSearchViewModel extends ChangeNotifier {
   bool isLoading = false;
 
   void fetchImages(String query) async {
+
     isLoading = true;
     notifyListeners();
 
