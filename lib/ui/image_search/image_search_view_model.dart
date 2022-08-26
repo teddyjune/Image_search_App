@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:image_search_app/data/model/photo.dart';
 import 'package:image_search_app/data/repository/photo_repository.dart';
@@ -11,6 +13,10 @@ class ImageSearchViewModel extends ChangeNotifier {
 
   MainState get state => _state; //데이터
 
+  final _eventController = StreamController<String>();
+
+  Stream<String> get eventStream => _eventController.stream;
+
   List<Photo> photos = [];
 
   //로딩
@@ -19,6 +25,10 @@ class ImageSearchViewModel extends ChangeNotifier {
   void onAction(MainAction action) {
     action.when(
       getImages: (query) {
+        if (query.isEmpty) {
+          _eventController.add('검색어를 입력해 주세요');
+          return;
+        }
         fetchImages(query);
       },
     );
@@ -43,7 +53,7 @@ class ImageSearchViewModel extends ChangeNotifier {
         isLoading: false,
       );
       notifyListeners();
-      print('error!! : $message'); //에러 메시지를 그대로 띄운다.
+      _eventController.add(message);
     });
   }
 }

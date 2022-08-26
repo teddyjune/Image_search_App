@@ -14,6 +14,23 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
   final _controller = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final viewModel = context.read<ImageSearchViewModel>();
+      viewModel.eventStream.listen((event) {
+        showSnackBar:
+        (message) {
+          final snackBar = SnackBar(
+            content: Text(message),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        };
+      });
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
