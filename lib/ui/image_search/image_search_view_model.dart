@@ -7,7 +7,7 @@ import 'package:image_search_app/ui/main_state.dart';
 class ImageSearchViewModel extends ChangeNotifier {
   //데이터 저장소
   late final PhotoRepository _photoRepository;
-  final MainState _state = const MainState();
+  MainState _state = const MainState();
 
   MainState get state => _state; //데이터
 
@@ -25,11 +25,25 @@ class ImageSearchViewModel extends ChangeNotifier {
   }
 
   void fetchImages(String query) async {
-    isLoading = true;
+    _state = state.copyWith(
+      isLoading: true,
+    );
     notifyListeners();
 
-    photos = await _photoRepository.getImages(query);
-    isLoading = false;
-    notifyListeners();
+    final result = await _photoRepository.getImages(query);
+    result.when(success: (photos) {
+      _state = state.copyWith(
+        photos: photos,
+        isLoading: false,
+      );
+      notifyListeners();
+    }, error: (message) {
+      _state = state.copyWith(
+        photos: [], //에러가 났을 때 데이터를 날린다.
+        isLoading: false,
+      );
+      notifyListeners();
+      print('error!! : $message'); //에러 메시지를 그대로 띄운다.
+    });
   }
 }

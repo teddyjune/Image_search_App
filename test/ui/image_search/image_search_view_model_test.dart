@@ -9,14 +9,14 @@ void main() {
     final viewModel =
         ImageSearchViewModel(photoRepository: MockPhotoRepository());
     viewModel.onAction(const MainAction.getImages('query'));
-    Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     expect(viewModel.state.photos.length, 3);
     expect(viewModel.state.photos.first.tags, 'google');
   });
 }
 
-class MockPhotoRepository implements PhotoRepository {
+class MockPhotoRepository implements PhotoRepository  {
   @override
   Future<List<Photo>> getImages(String query) async {
     return const [

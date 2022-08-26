@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:image_search_app/data/data_source/pixabay_api.dart';
 import 'package:image_search_app/data/model/photo.dart';
+import 'package:image_search_app/data/util/result.dart';
 
 void main() {
   test('이미지를 가져오는 기능', () async {
