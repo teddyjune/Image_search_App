@@ -3,6 +3,8 @@ import 'package:image_search_app/data/model/photo.dart';
 import 'package:image_search_app/ui/image_search/image_search_view_model.dart';
 import 'package:provider/provider.dart';
 
+import 'main_action.dart';
+
 class ImageSearchApp extends StatefulWidget {
   const ImageSearchApp({Key? key}) : super(key: key);
 
@@ -61,6 +63,7 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ImageSearchViewModel>();
+    final state = viewModel.state;
 
     return Scaffold(
       appBar: AppBar(
@@ -86,7 +89,8 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
                   ),
                   suffixIcon: GestureDetector(
                       onTap: () {
-                        viewModel.fetchImages(_controller.text);
+                        viewModel
+                            .onAction(MainAction.getImages(_controller.text));
                       },
                       child: const Icon(Icons.search)),
                   hintText: '검색어를 입력하세요',
@@ -95,14 +99,14 @@ class _ImageSearchAppState extends State<ImageSearchApp> {
             ),
           ),
           Expanded(
-            child: viewModel.isLoading
+            child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : GridView(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    children: viewModel.photos.map((Photo image) {
+                    children: state.photos.map((Photo image) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ClipRRect(
