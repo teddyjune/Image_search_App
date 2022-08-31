@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_search_app/data/model/photo.dart';
 import 'package:image_search_app/data/repository/photo_repository.dart';
 import 'package:image_search_app/ui/image_search/main_action.dart';
+import 'package:image_search_app/ui/image_search/main_ui_event.dart';
 import 'package:image_search_app/ui/main_state.dart';
 
 class ImageSearchViewModel extends ChangeNotifier {
@@ -13,9 +14,9 @@ class ImageSearchViewModel extends ChangeNotifier {
 
   MainState get state => _state; //데이터
 
-  final _eventController = StreamController<String>();
+  final _eventController = StreamController<MainUiEvent>();
 
-  Stream<String> get eventStream => _eventController.stream;
+  Stream<MainUiEvent> get eventStream => _eventController.stream;
 
   List<Photo> photos = [];
 
@@ -26,7 +27,7 @@ class ImageSearchViewModel extends ChangeNotifier {
     action.when(
       getImages: (query) {
         if (query.isEmpty) {
-          _eventController.add('검색어를 입력해 주세요');
+          _eventController.add(const MainUiEvent.ShowDialog('검색어를 입력해 주세요'));
           return;
         }
         fetchImages(query);
@@ -53,7 +54,7 @@ class ImageSearchViewModel extends ChangeNotifier {
         isLoading: false,
       );
       notifyListeners();
-      _eventController.add(message);
+      _eventController.add(MainUiEvent.ShowSnackBar(message));
     });
   }
 }
