@@ -17,10 +17,10 @@ void main() {
   });
 }
 
-class MockPhotoRepository implements PhotoRepository  {
+class MockPhotoRepository implements PhotoRepository {
   @override
   Future<Result<List<Photo>>> getImages(String query) async {
-    return const [
+    return Result.success([
       Photo(
         previewURL: "http://www.google.com",
         tags: 'google',
@@ -33,6 +33,6 @@ class MockPhotoRepository implements PhotoRepository  {
         previewURL: "http://www.kakao.com",
         tags: 'kakao',
       ),
-    ];
+    ]);
   }
 }
